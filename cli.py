@@ -283,12 +283,12 @@ class CmsClient(threading.Thread):
 
         while 1:
             # self.login_cms()
-            time.sleep(1)
-            # if self.login_state is False:
-            #     self.login_cms()
-            # if self.reconnet:
-            #     break
-            # time.sleep(5)
+            # time.sleep(1)
+            if self.login_state is False:
+                self.login_cms()
+            if self.reconnet:
+                break
+            time.sleep(5)
 
         self.mq_client.close()
         self.mq_client = None
@@ -300,10 +300,10 @@ class CmsClient(threading.Thread):
                 print 'none msg...'
                 self.reconnet = True
                 break
-            # else:
-            #     if self.handle_msg(msg) is True:
-            #         self.reconnet = True
-            #         break
+            else:
+                if self.handle_msg(msg) is True:
+                    self.reconnet = True
+                    break
 
     def handle_msg(self, msg):
         # print 'recieve msg: %s' % msg.body
@@ -341,7 +341,7 @@ class Daemon(BaseDaemon):
     def __init__(self, pidfile, stdout, stderr):
         super(Daemon, self).__init__(pidfile, stdout=stdout, stderr=stderr)
         self.rabbit_server = '192.168.120.108'
-        self.vhost = 'v2'
+        self.vhost = '%2F'
 
     def run(self):
         # 序列号开头8位，型号，并发数量，sn开始序号在init中定义

@@ -5,7 +5,7 @@ import threading
 import paramiko
 from clilist import client_list
 
-SPAN = 900
+SPAN = 500
 
 
 ssh = paramiko.SSHClient()
@@ -38,7 +38,7 @@ def start_client(ssh, host):
 	if _e:
 		print ('start %s client error:' % host, _e)
 	else:
-		print o.read()
+		print host, o.read()
 
 
 def stop_client(host):
@@ -62,6 +62,7 @@ def show_client_ini(host):
 def start_cli(ssh, host):
 	t = threading.Thread(target=start_client, args=(ssh, host))
 	t.start()
+	time.sleep(0.5)
 	# t.join()
 
 
@@ -84,17 +85,17 @@ def run_command(host, cmd):
 
 
 def run():
-	cmd = 'cat ~/sts/error.log'
+	# cmd = 'cat ~/sts/error.log'
 	for index, host in enumerate(client_list):
 		ssh.connect(host, username='root')
 		# set_client_count(index * SPAN + 1, (index + 1) * SPAN, host)
 		# sftp()
-		stop_client(host)
-		# start_cli(ssh, host)
+		# stop_client(host)
+		start_cli(ssh, host)
 		# show_client_ini(host)
 		# run_command(host, cmd)
-	time.sleep(5)
-	ssh.close()
+		ssh.close()
+	# time.sleep(2)
 
 run()
 
